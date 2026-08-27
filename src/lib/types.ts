@@ -5,6 +5,10 @@ export interface Product {
   priceUSD: number;
   badge?: string;
   rewards: Array<{ name: string; qty: number }>;
+  // Optional real-data fields for richer product presentation
+  image?: string; // path to transparent PNG
+  purchaseLimit?: string; // e.g. "Weekly (0/2)" or "Unlimited"
+  rewardsText?: string[]; // alternative to name/qty when exact text must be preserved
 }
 
 export interface LoyaltyTier {

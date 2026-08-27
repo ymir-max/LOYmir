@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { gameEvents } from "@/lib/mock-data";
@@ -366,5 +368,3 @@ function CheckClaimPanel({
     </div>
   );
 }
-
- 
