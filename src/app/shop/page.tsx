@@ -35,7 +35,7 @@ export default function ShopPage() {
   }, [active]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pt-28 md:pt-36">
       <h1 className="font-display heading-metallic text-3xl font-semibold tracking-[0.14em]">Web Shop</h1>
 
       {/* Tabs */}

@@ -64,7 +64,7 @@ export default function EventDetailPage({ params }: Props) {
   const Icon = iconMap[event.icon as keyof typeof iconMap] ?? Users;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pt-28 md:pt-36">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="grid h-12 w-12 place-items-center rounded-lg border border-violet-400/40 bg-violet-500/15 text-violet-200">

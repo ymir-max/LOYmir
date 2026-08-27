@@ -27,7 +27,7 @@ export default function EventsPage() {
   const events = useMemo(() => gameEvents, []);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pt-28 md:pt-36">
       <h1 className="font-display heading-metallic text-3xl font-semibold tracking-[0.14em]">Event Center</h1>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
