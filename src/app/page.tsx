@@ -1,10 +1,37 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Monitor, Smartphone, CheckCircle2 } from "lucide-react";
+import {
+  Monitor,
+  Smartphone,
+  Apple,
+  Download,
+  Users,
+  UserPlus,
+  Share2,
+  Video,
+  ShieldCheck,
+  Camera,
+  Swords,
+  Trophy,
+  CalendarDays,
+  Sparkles,
+  ImageOff,
+} from "lucide-react";
 import SectionDivider from "@/components/SectionDivider";
+import { gameEvents } from "@/lib/mock-data";
+import { LINKS } from "@/config/links";
+
+const GOLD_TEXT =
+  "bg-[linear-gradient(180deg,var(--accent-cream),var(--accent-bronze),var(--accent-cream))] [background-clip:text] [-webkit-background-clip:text] text-transparent [-webkit-text-fill-color:transparent]";
+
+const BTN_PRIMARY =
+  "inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold text-[color:var(--bg-base)] shadow-[inset_0_0_0_1px_rgba(168,135,90,0.45)] bg-[linear-gradient(180deg,var(--accent-cream),var(--accent-bronze))] transition-all hover:shadow-[0_0_24px_0_rgba(232,217,181,0.25),inset_0_0_0_1px_rgba(168,135,90,0.55)] active:scale-[0.98]";
+
+const BTN_GHOST =
+  "inline-flex items-center justify-center gap-2 rounded-lg border border-[color:var(--accent-bronze)]/45 bg-black/25 px-5 py-2.5 text-sm font-medium text-[color:var(--text-pale)] transition-all hover:border-[color:var(--accent-cream)]/60 hover:bg-black/40 active:scale-[0.98]";
 
 export default function Home() {
   return (
@@ -26,8 +53,9 @@ export default function Home() {
           transition={{ duration: 70, ease: [0.16, 1, 0.3, 1], repeat: Infinity }}
         />
       </div>
+
       {/* Full-bleed hero breakout from main's max-w and padding */}
-      <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen -mt-10 -mb-10">
+      <div className="relative w-full -mt-10 -mb-10" style={{ marginInline: "calc(50% - 50vw + var(--sbw, 0px))" }}>
         <Hero />
       </div>
 
@@ -38,236 +66,176 @@ export default function Home() {
       <Classes />
 
       <SectionDivider />
+      <Events />
+
+      <SectionDivider />
       <SystemRequirements />
       <SectionDivider />
     </div>
   );
 }
 
-function Hero() {
-  const letters = [
-    "/images/letters/letter-01-L.png",
-    "/images/letters/letter-02-E1.png",
-    "/images/letters/letter-03-G.png",
-    "/images/letters/letter-04-E2.png",
-    "/images/letters/letter-05-N.png",
-    "/images/letters/letter-06-D.png",
-    "/images/letters/letter-07-O.png",
-    "/images/letters/letter-08-F.png",
-    "/images/letters/letter-09-Y.png",
-    "/images/letters/letter-10-M.png",
-    "/images/letters/letter-11-I.png",
-    "/images/letters/letter-12-R.png",
-  ];
+/* ------------------------------------------------------------------ */
+/* Placeholder used everywhere artwork is not ready yet                */
+/* ------------------------------------------------------------------ */
 
-  const [scale, setScale] = useState(1);
-  const wrapRef = useRef<HTMLDivElement | null>(null);
-  const rowRef = useRef<HTMLDivElement | null>(null);
-  const [imagesLoaded, setImagesLoaded] = useState(0);
-  const raf = useRef<number | null>(null);
-  const [email, setEmail] = useState("");
-  const [regStatus, setRegStatus] = useState<"idle" | "success" | "error">("idle");
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const calc = () => {
-      const wrapW = wrapRef.current?.clientWidth ?? 0;
-      const rowW = rowRef.current?.scrollWidth ?? 0;
-      if (wrapW && rowW) {
-        const pad = 16; // breathing room
-        const next = Math.min(1, (wrapW - pad) / rowW);
-        setScale(Number.isFinite(next) ? Math.max(0.4, next) : 1);
-      }
-    };
-    calc();
-    let ro: ResizeObserver | null = null;
-    // Only attach ResizeObserver if supported
-    if ("ResizeObserver" in window) {
-      ro = new ResizeObserver(calc);
-      if (wrapRef.current) ro.observe(wrapRef.current);
-      if (rowRef.current) ro.observe(rowRef.current);
-    }
-    window.addEventListener("resize", calc);
-    return () => {
-      ro?.disconnect();
-      window.removeEventListener("resize", calc);
-    };
-  }, []);
-
-  // Recalculate once images load to prevent mismeasure before natural widths are known
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const wrapW = wrapRef.current?.clientWidth ?? 0;
-    const rowW = rowRef.current?.scrollWidth ?? 0;
-    if (wrapW && rowW) {
-      const pad = 16;
-      const next = Math.min(1, (wrapW - pad) / rowW);
-      setScale(Number.isFinite(next) ? Math.max(0.4, next) : 1);
-    }
-  }, [imagesLoaded]);
-
+function ArtPlaceholder({
+  label,
+  className = "",
+}: {
+  label?: string;
+  className?: string;
+}) {
   return (
-    <section className="relative h-[100svh] w-full overflow-hidden">
-      <video
-        className="absolute inset-0 h-full w-full object-cover"
-        src="/videos/hero-bg.mp4"
-        poster="/images/hero-bg-poster.jpg"
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_40%_at_50%_30%,transparent,rgba(0,0,0,0.35)),linear-gradient(to_bottom,rgba(0,0,0,0.6),rgba(0,0,0,0.5),var(--bg-base))]" />
+    <div
+      className={
+        "relative grid place-items-center overflow-hidden rounded-xl border border-[color:var(--accent-bronze)]/30 bg-[linear-gradient(160deg,rgba(232,217,181,0.06),rgba(0,0,0,0.35))] " +
+        className
+      }
+    >
+      <div className="flex flex-col items-center gap-2 px-6 text-center">
+        <ImageOff className="h-6 w-6 text-[color:var(--accent-bronze)]/70" />
+        {label && (
+          <div className={"font-display text-lg tracking-[0.16em] " + GOLD_TEXT}>{label}</div>
+        )}
+        <div className="text-xs tracking-wide text-[color:var(--text-muted)]">
+          Artwork coming soon
+        </div>
+      </div>
+    </div>
+  );
+}
 
-      <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center px-4 text-center">
-        <motion.h1 className="w-full">
-          <span className="sr-only">Legend of Ymir</span>
-          <div ref={wrapRef} className="mx-auto w-full max-w-5xl px-4">
-            <div
-              ref={rowRef}
-              className="mx-auto inline-flex flex-nowrap items-center justify-center"
-              style={{ perspective: "800px", transform: `scale(${scale})`, transformOrigin: "center top", willChange: "transform" }}
-            >
-            {letters.map((src, i) => {
-              const baseDur = 3 + ((i * 37) % 20) / 10; // 3.0 - 5.0s pseudo-random
-              const movementDur = baseDur * 2; // 2x slower movement
-              const delay = i * 0.15 + (((i * 17) % 10) / 100); // stagger + small offset
-              const isWordGap = i === 5 || i === 7; // LEGEND | OF | YMIR
-              return (
-                <motion.div
-                  key={src}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: [0, -3, 0, 3, 0], rotateZ: [-1, 0.5, 1, 0.5, -1] }}
-                  transition={{
-                    opacity: { duration: 0.4, ease: [0.16, 1, 0.3, 1], delay },
-                    y: { duration: movementDur, repeat: Infinity, repeatType: "mirror", ease: [0.16, 1, 0.3, 1], delay },
-                    rotateZ: { duration: movementDur * 1.1, repeat: Infinity, repeatType: "mirror", ease: [0.16, 1, 0.3, 1], delay: delay + 0.05 },
-                  }}
-                  className={isWordGap ? "mr-6 sm:mr-8" : "mr-1 sm:mr-2"}
-                >
-                  <img
-                    src={src}
-                    alt=""
-                    className="block h-12 sm:h-20 md:h-[110px] w-auto select-none opacity-100"
-                    draggable={false}
-                    aria-hidden
-                    onLoad={() => setImagesLoaded((n) => n + 1)}
-                  />
-                </motion.div>
-              );
-            })}
-            </div>
-          </div>
+/* ------------------------------------------------------------------ */
+/* Hero                                                                */
+/* ------------------------------------------------------------------ */
+
+function Hero() {
+  return (
+    <section className="relative flex min-h-[100svh] w-full items-center overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(1200px_700px_at_50%_-10%,rgba(232,217,181,0.10),transparent_60%),linear-gradient(to_bottom,#0b0906,#120f0a_45%,var(--bg-base))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_40%_at_50%_30%,transparent,rgba(0,0,0,0.35))]" />
+
+      <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-4 py-24 text-center">
+        <motion.h1
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="font-display"
+        >
+          <span
+            className={
+              "block text-[clamp(38px,9vw,104px)] font-semibold uppercase leading-[1.05] tracking-[0.12em] " +
+              GOLD_TEXT
+            }
+          >
+            Astral Ymir
+          </span>
         </motion.h1>
+
+        <motion.div
+          aria-hidden
+          initial={{ opacity: 0, scaleX: 0.6 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+          className="mt-5 h-[1px] w-[min(420px,80%)] bg-[linear-gradient(90deg,transparent,var(--accent-bronze),transparent)]"
+        />
+
         <motion.p
           initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
-          className="mt-4 max-w-2xl text-[color:var(--text-pale)]/90"
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+          className="mt-6 max-w-2xl text-[color:var(--text-pale)]/90"
         >
-          Closed Beta Test — Late August to Early September 2026
+          The server is live. Create your account and start playing.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-8 w-full px-4"
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.22 }}
+          className="mt-9"
         >
-          <div className="mx-auto max-w-xl rounded-2xl border border-[color:var(--accent-bronze)]/45 bg-black/30 p-6 shadow-[0_0_0_1px_rgba(168,135,90,0.25)] backdrop-blur-sm">
-            <div className="text-center">
-              <div className="font-display tracking-[0.22em]">
-                <div className="text-xl sm:text-2xl bg-[linear-gradient(180deg,var(--accent-cream),var(--accent-bronze),var(--accent-cream))] [background-clip:text] [-webkit-background-clip:text] text-transparent [-webkit-text-fill-color:transparent]">
-                  PRE REGISTRATION
-                </div>
-                <div className="-mt-1 text-xl sm:text-2xl bg-[linear-gradient(180deg,var(--accent-cream),var(--accent-bronze),var(--accent-cream))] [background-clip:text] [-webkit-background-clip:text] text-transparent [-webkit-text-fill-color:transparent]">
-                  WIN CASH
-                </div>
-              </div>
-
-              {regStatus !== "success" ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const ok = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim());
-                    if (!ok) {
-                      setRegStatus("error");
-                      return;
-                    }
-                    console.log("Pre-registration:", email.trim());
-                    setRegStatus("success");
-                  }}
-                  className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto] sm:gap-2"
-                >
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      if (regStatus !== "idle") setRegStatus("idle");
-                    }}
-                    placeholder="Enter your email"
-                    className={
-                      regStatus === "error"
-                        ? "w-full rounded-lg border border-red-500/50 bg-black/30 px-3 py-2 text-sm text-[color:var(--text-pale)] outline-none focus:ring-2 focus:ring-red-400/60"
-                        : "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[color:var(--text-pale)] outline-none focus:ring-2 focus:ring-[color:var(--accent-cream)]/50"
-                    }
-                  />
-                  <button
-                    type="submit"
-                    className="rounded-lg px-5 py-2.5 text-sm font-semibold text-[color:var(--bg-base)] shadow-[inset_0_0_0_1px_rgba(168,135,90,0.45)] bg-[linear-gradient(180deg,var(--accent-cream),var(--accent-bronze))] transition-all hover:shadow-[0_0_24px_0_rgba(232,217,181,0.25),inset_0_0_0_1px_rgba(168,135,90,0.55)] active:scale-[0.98]"
-                  >
-                    Pre-register
-                  </button>
-                </form>
-              ) : (
-                <div className="mt-4 inline-flex items-center justify-center gap-2 rounded-lg border border-emerald-400/30 bg-emerald-500/15 px-3 py-2 text-sm text-emerald-200">
-                  <CheckCircle2 className="h-4 w-4" /> Thanks — you're registered!
-                </div>
-              )}
-            </div>
-          </div>
+          <a
+            href={LINKS.register}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={BTN_PRIMARY + " px-10 py-3.5 text-base tracking-[0.14em]"}
+          >
+            REGISTER
+          </a>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="mt-8 flex flex-wrap items-center justify-center gap-5"
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+          className="mt-10 grid w-full max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3"
         >
-          <Link
-            href="/shop"
-            className="rounded-lg px-5 py-2.5 text-sm font-semibold text-[color:var(--bg-base)] shadow-[inset_0_0_0_1px_rgba(168,135,90,0.45)] bg-[linear-gradient(180deg,var(--accent-cream),var(--accent-bronze))] transition-all hover:shadow-[0_0_24px_0_rgba(232,217,181,0.25),inset_0_0_0_1px_rgba(168,135,90,0.55)] active:scale-[0.98]"
-          >
-            Enter the Shop
-          </Link>
-          <Link
-            href="/events"
-            className="rounded-lg px-5 py-2.5 text-sm font-semibold text-[color:var(--bg-base)] shadow-[inset_0_0_0_1px_rgba(168,135,90,0.45)] bg-[linear-gradient(180deg,var(--accent-cream),var(--accent-bronze))] transition-all hover:shadow-[0_0_24px_0_rgba(232,217,181,0.25),inset_0_0_0_1px_rgba(168,135,90,0.55)] active:scale-[0.98]"
-          >
-            View Events
-          </Link>
+          <DownloadTile
+            icon={<Monitor className="h-4 w-4" />}
+            label="Download for PC"
+            href={LINKS.downloadPC}
+            mirror={LINKS.downloadPCMirror}
+          />
+          <DownloadTile
+            icon={<Smartphone className="h-4 w-4" />}
+            label="Download APK"
+            href={LINKS.downloadAndroid}
+            mirror={LINKS.downloadAndroidMirror}
+          />
+          <DownloadTile
+            icon={<Apple className="h-4 w-4" />}
+            label="Download for iOS"
+            href={LINKS.downloadIOS}
+          />
         </motion.div>
       </div>
     </section>
   );
 }
 
+function DownloadTile({
+  icon,
+  label,
+  href,
+  mirror,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  href: string;
+  mirror?: string;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-1.5">
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={BTN_GHOST + " w-full"}
+      >
+        {icon}
+        {label}
+      </a>
+      {mirror && (
+        <a
+          href={mirror}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-xs text-[color:var(--text-muted)] underline-offset-4 transition-colors hover:text-[color:var(--accent-cream)] hover:underline"
+        >
+          <Download className="h-3 w-3" /> Mirror
+        </a>
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Welcome                                                             */
+/* ------------------------------------------------------------------ */
+
 function Welcome() {
-  const [playing, setPlaying] = useState(false);
-  const vidRef = useRef<HTMLVideoElement | null>(null);
-
-  const onPlay = () => {
-    if (!playing) {
-      vidRef.current?.play();
-      setPlaying(true);
-    }
-  };
-
   return (
     <section className="relative w-full">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(900px_600px_at_50%_-10%,var(--bg-panel)_0%,var(--bg-base)_60%),linear-gradient(to_bottom,var(--bg-base),var(--bg-panel),var(--bg-base))]" />
@@ -279,7 +247,7 @@ function Welcome() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="font-display text-2xl font-semibold text-[color:var(--text-pale)] [text-shadow:0_0_14px_rgba(232,217,181,0.25)]"
         >
-          Welcome to Legend of Ymir
+          Welcome to Astral Ymir
         </motion.h2>
 
         <div className="mt-6 grid gap-8 lg:grid-cols-2">
@@ -288,28 +256,8 @@ function Welcome() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.06 }}
-            className="relative overflow-hidden rounded-xl border border-[color:var(--text-muted)]/20 bg-[color:var(--bg-panel)]"
           >
-            <video
-              ref={vidRef}
-              className="h-full w-full object-cover"
-              src="/videos/welcome-art.mp4"
-              poster="/images/welcome-art-poster.jpg"
-              controls={playing}
-              playsInline
-              preload="none"
-            />
-            {!playing && (
-              <button
-                aria-label="Play"
-                onClick={onPlay}
-                className="absolute inset-0 grid place-items-center bg-black/40 backdrop-blur-sm transition-colors hover:bg-black/30"
-              >
-                <span className="inline-flex items-center gap-2 rounded-full border border-[color:var(--accent-bronze)]/50 bg-[rgba(232,217,181,0.14)] px-4 py-2 text-sm font-medium text-[color:var(--text-pale)]">
-                  <Play className="h-5 w-5" /> Play
-                </span>
-              </button>
-            )}
+            <ArtPlaceholder className="aspect-video w-full" />
           </motion.div>
 
           <motion.p
@@ -319,7 +267,10 @@ function Welcome() {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             className="text-[color:var(--text-pale)]"
           >
-            Legend of YMIR is one of the few AAA-level MMORPGs developed with the latest technology of Unreal Engine 5. Set in the world of Norse mythology, the costumes, hairstyles, and personalities of key mythical heroes and figures have been meticulously crafted, featuring a world that authentically represents the vivid living environment of that era.
+            Astral Ymir is an Unreal Engine 5 MMORPG set in the world of Norse
+            mythology, with boosted rates, community events and a server that is
+            open and running right now. Create an account, pick your class and
+            join the world.
           </motion.p>
         </div>
       </div>
@@ -328,44 +279,18 @@ function Welcome() {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* Classes                                                             */
+/* ------------------------------------------------------------------ */
+
 function Classes() {
   const classes = [
-    {
-      name: "BERSERKER",
-      tagline: "Ruthless and Bloodthirsty Fighter",
-      video: "/videos/berserker.mp4",
-      poster: "/images/berserker-poster.jpg",
-    },
-    {
-      name: "VOLVA",
-      tagline: "Bearer of the Great Will",
-      video: "/videos/volva.mp4",
-      poster: "/images/volva-poster.jpg",
-    },
-    {
-      name: "SKALD",
-      tagline: "The Melodies that Promise Victory",
-      video: "/videos/skald.mp4",
-      poster: "/images/skald-poster.jpg",
-    },
-    {
-      name: "WARLORD",
-      tagline: "Soul-Piercing Strikes",
-      video: "/videos/warlord.mp4",
-      poster: "/images/warlord-poster.jpg",
-    },
-    {
-      name: "ARCHER",
-      tagline: "The ultimate sharpshooter bringing victory",
-      video: "/videos/archer.mp4",
-      poster: "/images/archer-poster.jpg",
-    },
-    {
-      name: "RUNE FIGHTER",
-      tagline: "Unleash the Storm of Runes",
-      video: "/videos/rune-fighter.mp4",
-      poster: "/images/rune-fighter-poster.jpg",
-    },
+    { name: "BERSERKER", tagline: "Ruthless and Bloodthirsty Fighter" },
+    { name: "VOLVA", tagline: "Bearer of the Great Will" },
+    { name: "SKALD", tagline: "The Melodies that Promise Victory" },
+    { name: "WARLORD", tagline: "Soul-Piercing Strikes" },
+    { name: "ARCHER", tagline: "The ultimate sharpshooter bringing victory" },
+    { name: "RUNE FIGHTER", tagline: "Unleash the Storm of Runes" },
   ] as const;
 
   const [active, setActive] = useState(0);
@@ -385,26 +310,11 @@ function Classes() {
         </motion.h2>
       </div>
 
-      <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mt-6 w-screen">
+      <div className="relative w-full mt-6" style={{ marginInline: "calc(50% - 50vw + var(--sbw, 0px))" }}>
         <div className="relative overflow-hidden">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`bg-${active}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="pointer-events-none absolute inset-0 -z-10"
-            >
-              <div
-                className="absolute inset-0 bg-cover bg-center blur-2xl opacity-40 [filter:saturate(0.9)]"
-                style={{ backgroundImage: `url(${activeItem.poster})` }}
-              />
-              <div className="absolute inset-0 bg-[radial-gradient(1000px_400px_at_50%_-100px,rgba(232,217,181,0.08),transparent),linear-gradient(180deg,rgba(0,0,0,0.62),rgba(0,0,0,0.86))]" />
-            </motion.div>
-          </AnimatePresence>
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(1000px_400px_at_50%_-100px,rgba(232,217,181,0.08),transparent),linear-gradient(180deg,rgba(0,0,0,0.62),rgba(0,0,0,0.86))]" />
 
-          <div className="relative mx-auto grid min-h-[70svh] w-full max-w-6xl items-center gap-6 px-4 py-8 lg:min-h-[84svh] lg:grid-cols-[0.44fr_0.56fr_auto]">
+          <div className="relative mx-auto grid w-full max-w-6xl items-center gap-6 px-4 py-12 lg:grid-cols-[0.44fr_0.56fr_auto]">
             <div className="order-1 lg:order-none">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -416,7 +326,12 @@ function Classes() {
                   className="text-center lg:text-left"
                 >
                   <div className="font-display tracking-[0.18em]">
-                    <div className="mx-auto inline-block whitespace-nowrap text-[clamp(22px,4.2vw,44px)] bg-[linear-gradient(180deg,var(--accent-cream),var(--accent-bronze),var(--accent-cream))] [background-clip:text] [-webkit-background-clip:text] text-transparent [-webkit-text-fill-color:transparent]">
+                    <div
+                      className={
+                        "mx-auto inline-block whitespace-nowrap text-[clamp(22px,4.2vw,44px)] " +
+                        GOLD_TEXT
+                      }
+                    >
                       {activeItem.name}
                     </div>
                   </div>
@@ -431,7 +346,7 @@ function Classes() {
             <div className="order-3 lg:order-none">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={`video-${active}`}
+                  key={`art-${active}`}
                   initial={{ opacity: 0, scale: 0.985 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 1.01 }}
@@ -439,19 +354,10 @@ function Classes() {
                   className="rounded-2xl p-[1px] bg-[linear-gradient(135deg,rgba(168,135,90,0.35),transparent)]"
                 >
                   <div className="rounded-2xl bg-[color:var(--bg-panel)] p-2 sm:p-3">
-                    <div className="relative flex h-[74svh] sm:h-[78svh] w-full items-center justify-center overflow-hidden rounded-xl border border-[color:var(--text-muted)]/20">
-                      <video
-                        key={activeItem.video}
-                        className="h-full w-auto max-w-full object-contain bg-black/20"
-                        src={activeItem.video}
-                        poster={activeItem.poster}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="none"
-                      />
-                    </div>
+                    <ArtPlaceholder
+                      label={activeItem.name}
+                      className="h-[46svh] w-full sm:h-[54svh]"
+                    />
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -467,32 +373,11 @@ function Classes() {
                     onClick={() => setActive(i)}
                     className={
                       activeState
-                        ? "inline-flex items-center justify-center rounded-lg p-[2px] shadow-[0_0_18px_rgba(232,217,181,0.18)]"
-                        : "inline-flex items-center justify-center rounded-lg p-[2px]"
+                        ? "shrink-0 rounded-lg border border-[color:var(--accent-cream)]/60 bg-[rgba(232,217,181,0.12)] px-3 py-2 text-[11px] font-semibold tracking-[0.12em] text-[color:var(--text-pale)] shadow-[0_0_18px_rgba(232,217,181,0.18)] lg:w-32"
+                        : "shrink-0 rounded-lg border border-[color:var(--text-muted)]/25 px-3 py-2 text-[11px] tracking-[0.12em] text-[color:var(--text-muted)] transition-colors hover:border-[color:var(--accent-bronze)]/50 hover:text-[color:var(--text-pale)] lg:w-32"
                     }
                   >
-                    <div className={
-                      activeState
-                        ? "rounded-md p-[1px] bg-[linear-gradient(135deg,rgba(232,217,181,0.65),rgba(168,135,90,0.45))]"
-                        : "rounded-md p-[1px] bg-[linear-gradient(135deg,rgba(168,135,90,0.35),transparent)]"
-                    }>
-                      <div className={
-                        activeState
-                          ? "overflow-hidden rounded-[10px] border border-[color:var(--accent-cream)]/60"
-                          : "overflow-hidden rounded-[10px] border border-[color:var(--text-muted)]/25"
-                      }>
-                        <img
-                          src={c.poster}
-                          alt={c.name}
-                          className={
-                            activeState
-                              ? "block h-16 w-16 lg:h-20 lg:w-20 object-cover"
-                              : "block h-16 w-16 lg:h-20 lg:w-20 object-cover brightness-50"
-                          }
-                          draggable={false}
-                        />
-                      </div>
-                    </div>
+                    {c.name}
                   </button>
                 );
               })}
@@ -505,6 +390,123 @@ function Classes() {
     </section>
   );
 }
+
+/* ------------------------------------------------------------------ */
+/* Events (moved here from the removed Events tab)                     */
+/* ------------------------------------------------------------------ */
+
+const eventIconMap = {
+  Users,
+  UserPlus,
+  Share2,
+  Video,
+  ShieldCheck,
+  Camera,
+  Swords,
+  Trophy,
+} as const;
+
+function Events() {
+  const router = useRouter();
+  const events = useMemo(() => gameEvents, []);
+
+  return (
+    <section className="mx-auto w-full max-w-6xl px-4">
+      <motion.h2
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="font-display text-2xl font-semibold text-[color:var(--text-pale)] [text-shadow:0_0_14px_rgba(232,217,181,0.25)]"
+      >
+        EVENTS
+      </motion.h2>
+
+      <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {events.map((ev, idx) => {
+          const Icon = eventIconMap[ev.icon as keyof typeof eventIconMap] ?? Users;
+          const isActive = ev.status === "active";
+          return (
+            <motion.button
+              key={ev.id}
+              onClick={() => router.push(`/events/${ev.id}`)}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.35, delay: idx * 0.05 }}
+              className="text-left rounded-xl p-[1px] bg-[linear-gradient(135deg,rgba(168,135,90,0.35),transparent)] hover:shadow-[0_0_22px_rgba(232,217,181,0.14)]"
+            >
+              <div className="h-full rounded-xl border border-[color:var(--text-muted)]/20 bg-[color:var(--bg-panel)] p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="grid h-12 w-12 place-items-center rounded-lg icon-badge">
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <div className="text-xs text-[color:var(--text-muted)]">{ev.displayCode}</div>
+                      <h3 className="font-display text-lg font-semibold leading-tight text-[color:var(--text-pale)]">
+                        {ev.title}
+                      </h3>
+                    </div>
+                  </div>
+                  <span className="badge-bronze px-3 py-1 text-xs font-semibold">
+                    {isActive ? "ACTIVE" : "ENDED"}
+                  </span>
+                </div>
+
+                <p className="mt-3 text-sm text-[color:var(--text-pale)]/90">{ev.description}</p>
+
+                <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-[color:var(--text-muted)]">
+                  {ev.startsAt && (
+                    <span className="inline-flex items-center gap-1">
+                      <CalendarDays className="h-4 w-4 text-[color:var(--accent-bronze)]" /> Starts{" "}
+                      {ev.startsAt}
+                    </span>
+                  )}
+                  {ev.endsAt && (
+                    <span className="inline-flex items-center gap-1">
+                      <CalendarDays className="h-4 w-4 text-[color:var(--accent-bronze)]" /> Ends{" "}
+                      {ev.endsAt}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </motion.button>
+          );
+        })}
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.35, delay: events.length * 0.05 }}
+          className="rounded-xl p-[1px] bg-[linear-gradient(135deg,rgba(168,135,90,0.25),transparent)] text-left opacity-90"
+        >
+          <div className="h-full rounded-xl border border-[color:var(--text-muted)]/25 bg-[color:var(--bg-panel)] p-5">
+            <div className="flex items-center gap-3">
+              <div className="grid h-12 w-12 place-items-center rounded-lg icon-badge">
+                <Sparkles className="h-6 w-6" />
+              </div>
+              <div>
+                <div className="text-xs text-[color:var(--text-muted)]">Preview</div>
+                <h3 className="font-display text-lg font-semibold leading-tight text-[color:var(--text-pale)]">
+                  More Events Coming Soon
+                </h3>
+              </div>
+            </div>
+            <p className="mt-3 text-sm text-[color:var(--text-pale)]/90">
+              New events are being prepared — stay tuned on Discord for announcements.
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* System requirements                                                 */
+/* ------------------------------------------------------------------ */
 
 function SystemRequirements() {
   return (
@@ -520,7 +522,6 @@ function SystemRequirements() {
       </motion.h2>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        {/* PC */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -556,7 +557,6 @@ function SystemRequirements() {
           </div>
         </motion.div>
 
-        {/* Mobile */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -593,5 +593,3 @@ function SystemRequirements() {
     </section>
   );
 }
-
- 

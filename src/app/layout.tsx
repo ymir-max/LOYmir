@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Spectral, Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
@@ -19,15 +19,16 @@ const bodyFont = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Legend of Ymir",
-  description: "Legend of Ymir – prototype",
+  title: "Astral Ymir",
+  description:
+    "Astral Ymir — an Unreal Engine 5 Norse-mythology MMORPG server. Register, download the client and play.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${displayFont.variable} ${bodyFont.variable} h-full antialiased`}
+      className={`${displayFont.variable} ${bodyFont.variable} h-full overflow-x-hidden antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[color:var(--bg-base)] text-[color:var(--text-pale)]">
         <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(1200px_800px_at_50%_-10%,var(--bg-panel)_0%,var(--bg-base)_60%),linear-gradient(to_bottom,var(--bg-base),var(--bg-panel),var(--bg-base))]" />
