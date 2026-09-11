@@ -302,13 +302,17 @@ function Classes() {
                 >
                   <div className="rounded-2xl bg-[color:var(--bg-panel)] p-2 sm:p-3">
                     <div className="relative aspect-square w-full overflow-hidden rounded-xl border border-[color:var(--text-muted)]/20">
-                      <Image
-                        src={`/images/classes/${activeItem.slug}.webp`}
-                        alt={activeItem.name}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 620px"
-                        className="object-cover"
-                        priority={active === 0}
+                      <video
+                        key={activeItem.slug}
+                        className="absolute inset-0 h-full w-full object-cover"
+                        src={`/videos/classes/${activeItem.slug}.mp4`}
+                        poster={`/images/classes/${activeItem.slug}.webp`}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        aria-label={activeItem.name}
                       />
                     </div>
                   </div>
