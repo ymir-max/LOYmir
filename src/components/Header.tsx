@@ -6,20 +6,20 @@ import { LINKS } from "@/config/links";
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[color:var(--text-muted)]/20 bg-[color:var(--bg-panel)]/70 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+    <header className="sticky top-0 z-50 w-full overflow-visible border-b border-[color:var(--text-muted)]/20 bg-[color:var(--bg-panel)]/70 backdrop-blur">
+      <div className="relative mx-auto flex max-w-6xl items-center justify-end gap-3 px-4 py-3">
         <Link
           href="/"
           aria-label="Astral Ymir"
-          className="shrink-0 transition-transform hover:scale-[1.02]"
+          className="absolute left-2 top-1 z-[60] transition-transform hover:scale-[1.02] sm:left-4"
         >
           <Image
             src="/images/logo-astral-ymir.png"
             alt="Astral Ymir"
-            width={640}
-            height={171}
+            width={1166}
+            height={780}
             priority
-            className="h-[42px] w-auto sm:h-[52px] drop-shadow-[0_0_10px_rgba(232,217,181,0.12)]"
+            className="h-[84px] w-auto sm:h-[112px] lg:h-[132px]"
           />
         </Link>
 
@@ -43,7 +43,7 @@ export default function Header() {
 
           <span className="ml-1 hidden h-5 w-[1px] bg-[color:var(--text-muted)]/30 sm:block" />
 
-          <div className="flex items-center gap-3 text-[color:var(--accent-bronze)]">
+          <div className="hidden items-center gap-3 text-[color:var(--accent-bronze)] sm:flex">
             <a
               href={LINKS.discord}
               target="_blank"
