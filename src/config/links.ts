@@ -1,5 +1,5 @@
-export const LINKS = {
-  register: "https://api.astymir.com/passport/register?promo=AY1181B07F0892",
+﻿export const LINKS = {
+  register: "https://api.astymir.com/passport/register?promo=AYC4255C0FD3FC",
   cumulativeRewards: "https://rewards.astymir.com/",
   discord: "https://discord.gg/ymirastral",
   tiktok: "https://www.tiktok.com/@ymirprivate",
