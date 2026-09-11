@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -55,7 +55,7 @@ export default function Home() {
       </div>
 
       {/* Full-bleed hero breakout from main's max-w and padding */}
-      <div className="relative w-full -mt-10 -mb-10" style={{ marginInline: "calc(50% - 50vw + var(--sbw, 0px))" }}>
+      <div className="relative -mt-10 -mb-10" style={{ marginInline: "calc(50% - 50vw)" }}>
         <Hero />
       </div>
 
@@ -310,7 +310,7 @@ function Classes() {
         </motion.h2>
       </div>
 
-      <div className="relative w-full mt-6" style={{ marginInline: "calc(50% - 50vw + var(--sbw, 0px))" }}>
+      <div className="relative mt-6" style={{ marginInline: "calc(50% - 50vw)" }}>
         <div className="relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(1000px_400px_at_50%_-100px,rgba(232,217,181,0.08),transparent),linear-gradient(180deg,rgba(0,0,0,0.62),rgba(0,0,0,0.86))]" />
 
