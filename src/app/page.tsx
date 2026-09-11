@@ -19,7 +19,6 @@ import {
   Trophy,
   CalendarDays,
   Sparkles,
-  ImageOff,
 } from "lucide-react";
 import SectionDivider from "@/components/SectionDivider";
 import { gameEvents } from "@/lib/mock-data";
@@ -61,9 +60,6 @@ export default function Home() {
       </div>
 
       <SectionDivider />
-      <Welcome />
-
-      <SectionDivider />
       <Classes />
 
       <SectionDivider />
@@ -77,45 +73,28 @@ export default function Home() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Placeholder used everywhere artwork is not ready yet                */
-/* ------------------------------------------------------------------ */
-
-function ArtPlaceholder({
-  label,
-  className = "",
-}: {
-  label?: string;
-  className?: string;
-}) {
-  return (
-    <div
-      className={
-        "relative grid place-items-center overflow-hidden rounded-xl border border-[color:var(--accent-bronze)]/30 bg-[linear-gradient(160deg,rgba(232,217,181,0.06),rgba(0,0,0,0.35))] " +
-        className
-      }
-    >
-      <div className="flex flex-col items-center gap-2 px-6 text-center">
-        <ImageOff className="h-6 w-6 text-[color:var(--accent-bronze)]/70" />
-        {label && (
-          <div className={"font-display text-lg tracking-[0.16em] " + GOLD_TEXT}>{label}</div>
-        )}
-        <div className="text-xs tracking-wide text-[color:var(--text-muted)]">
-          Artwork coming soon
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /* Hero                                                                */
 /* ------------------------------------------------------------------ */
 
 function Hero() {
   return (
     <section className="relative flex min-h-[100svh] w-full items-center overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(1200px_700px_at_50%_-10%,rgba(232,217,181,0.10),transparent_60%),linear-gradient(to_bottom,#0b0906,#120f0a_45%,var(--bg-base))]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_40%_at_50%_30%,transparent,rgba(0,0,0,0.35))]" />
+      <video
+        className="absolute inset-0 h-full w-full object-cover"
+        src="/videos/hero.mp4"
+        poster="/images/hero-poster.jpg"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-hidden
+      />
+      {/* flat shade over the whole frame — sinks the generation artefacts */}
+      <div className="pointer-events-none absolute inset-0 bg-black/38" />
+      {/* dark cloud vignette — tight, edges go fully black well before the border */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_64%_56%_at_50%_46%,transparent_0%,rgba(0,0,0,0.30)_36%,rgba(0,0,0,0.84)_64%,#000_80%,var(--bg-base)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.55),rgba(0,0,0,0.12)_34%,rgba(0,0,0,0.45)_70%,var(--bg-base))]" />
 
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-4 py-24 text-center">
         <motion.h1
@@ -229,54 +208,6 @@ function DownloadTile({
         </a>
       )}
     </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Welcome                                                             */
-/* ------------------------------------------------------------------ */
-
-function Welcome() {
-  return (
-    <section className="relative w-full">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(900px_600px_at_50%_-10%,var(--bg-panel)_0%,var(--bg-base)_60%),linear-gradient(to_bottom,var(--bg-base),var(--bg-panel),var(--bg-base))]" />
-      <div className="mx-auto max-w-6xl px-4 py-16">
-        <motion.h2
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="font-display text-2xl font-semibold text-[color:var(--text-pale)] [text-shadow:0_0_14px_rgba(232,217,181,0.25)]"
-        >
-          Welcome to Astral Ymir
-        </motion.h2>
-
-        <div className="mt-6 grid gap-8 lg:grid-cols-2">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.06 }}
-          >
-            <ArtPlaceholder className="aspect-video w-full" />
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="text-[color:var(--text-pale)]"
-          >
-            Astral Ymir is an Unreal Engine 5 MMORPG set in the world of Norse
-            mythology, with boosted rates, community events and a server that is
-            open and running right now. Create an account, pick your class and
-            join the world.
-          </motion.p>
-        </div>
-      </div>
-      <div className="divider-gold mx-auto mt-8 w-full max-w-6xl px-4" />
-    </section>
   );
 }
 
