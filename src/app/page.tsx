@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -285,12 +286,12 @@ function Welcome() {
 
 function Classes() {
   const classes = [
-    { name: "BERSERKER", tagline: "Ruthless and Bloodthirsty Fighter" },
-    { name: "VOLVA", tagline: "Bearer of the Great Will" },
-    { name: "SKALD", tagline: "The Melodies that Promise Victory" },
-    { name: "WARLORD", tagline: "Soul-Piercing Strikes" },
-    { name: "ARCHER", tagline: "The ultimate sharpshooter bringing victory" },
-    { name: "RUNE FIGHTER", tagline: "Unleash the Storm of Runes" },
+    { name: "BERSERKER", tagline: "Ruthless and Bloodthirsty Fighter", slug: "berserker" },
+    { name: "VOLVA", tagline: "Bearer of the Great Will", slug: "volva" },
+    { name: "SKALD", tagline: "The Melodies that Promise Victory", slug: "skald" },
+    { name: "WARLORD", tagline: "Soul-Piercing Strikes", slug: "warlord" },
+    { name: "ARCHER", tagline: "The ultimate sharpshooter bringing victory", slug: "archer" },
+    { name: "RUNE FIGHTER", tagline: "Unleash the Storm of Runes", slug: "rune-fighter" },
   ] as const;
 
   const [active, setActive] = useState(0);
@@ -312,9 +313,24 @@ function Classes() {
 
       <div className="relative mt-6" style={{ marginInline: "calc(50% - 50vw)" }}>
         <div className="relative overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(1000px_400px_at_50%_-100px,rgba(232,217,181,0.08),transparent),linear-gradient(180deg,rgba(0,0,0,0.62),rgba(0,0,0,0.86))]" />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`bg-${active}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="pointer-events-none absolute inset-0 -z-10"
+            >
+              <div
+                className="absolute inset-0 bg-cover bg-center opacity-35 blur-2xl [filter:saturate(0.85)]"
+                style={{ backgroundImage: `url(/images/classes/${activeItem.slug}-thumb.webp)` }}
+              />
+            </motion.div>
+          </AnimatePresence>
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(1000px_400px_at_50%_-100px,rgba(232,217,181,0.08),transparent),linear-gradient(180deg,rgba(0,0,0,0.62),rgba(0,0,0,0.88))]" />
 
-          <div className="relative mx-auto grid w-full max-w-6xl items-center gap-6 px-4 py-12 lg:grid-cols-[0.44fr_0.56fr_auto]">
+          <div className="relative mx-auto grid w-full max-w-6xl items-center gap-8 px-4 py-10 lg:grid-cols-[0.30fr_1fr_auto]">
             <div className="order-1 lg:order-none">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -351,13 +367,19 @@ function Classes() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 1.01 }}
                   transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  className="rounded-2xl p-[1px] bg-[linear-gradient(135deg,rgba(168,135,90,0.35),transparent)]"
+                  className="mx-auto w-full max-w-[min(100%,82svh)] rounded-2xl p-[1px] bg-[linear-gradient(135deg,rgba(168,135,90,0.35),transparent)]"
                 >
                   <div className="rounded-2xl bg-[color:var(--bg-panel)] p-2 sm:p-3">
-                    <ArtPlaceholder
-                      label={activeItem.name}
-                      className="h-[46svh] w-full sm:h-[54svh]"
-                    />
+                    <div className="relative aspect-square w-full overflow-hidden rounded-xl border border-[color:var(--text-muted)]/20">
+                      <Image
+                        src={`/images/classes/${activeItem.slug}.webp`}
+                        alt={activeItem.name}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 620px"
+                        className="object-cover"
+                        priority={active === 0}
+                      />
+                    </div>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -373,11 +395,21 @@ function Classes() {
                     onClick={() => setActive(i)}
                     className={
                       activeState
-                        ? "shrink-0 rounded-lg border border-[color:var(--accent-cream)]/60 bg-[rgba(232,217,181,0.12)] px-3 py-2 text-[11px] font-semibold tracking-[0.12em] text-[color:var(--text-pale)] shadow-[0_0_18px_rgba(232,217,181,0.18)] lg:w-32"
-                        : "shrink-0 rounded-lg border border-[color:var(--text-muted)]/25 px-3 py-2 text-[11px] tracking-[0.12em] text-[color:var(--text-muted)] transition-colors hover:border-[color:var(--accent-bronze)]/50 hover:text-[color:var(--text-pale)] lg:w-32"
+                        ? "shrink-0 overflow-hidden rounded-lg border border-[color:var(--accent-cream)]/70 shadow-[0_0_18px_rgba(232,217,181,0.22)]"
+                        : "shrink-0 overflow-hidden rounded-lg border border-[color:var(--text-muted)]/25 transition-all hover:border-[color:var(--accent-bronze)]/60"
                     }
                   >
-                    {c.name}
+                    <Image
+                      src={`/images/classes/${c.slug}-thumb.webp`}
+                      alt={c.name}
+                      width={110}
+                      height={110}
+                      className={
+                        activeState
+                          ? "block h-16 w-16 object-cover object-top lg:h-20 lg:w-20"
+                          : "block h-16 w-16 object-cover object-top brightness-[0.45] transition-all hover:brightness-75 lg:h-20 lg:w-20"
+                      }
+                    />
                   </button>
                 );
               })}

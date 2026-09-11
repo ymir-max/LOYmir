@@ -2,9 +2,19 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { LINKS } from "@/config/links";
 
 export default function Header() {
+  const [hideLogo, setHideLogo] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setHideLogo((window.scrollY || 0) > 120);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <header className="sticky top-0 z-50 w-full overflow-visible border-b border-[color:var(--text-muted)]/20 bg-[color:var(--bg-panel)]/70 backdrop-blur">
       <div className="relative mx-auto flex max-w-6xl items-center justify-end gap-3 px-4 py-3">
@@ -12,6 +22,11 @@ export default function Header() {
           href="/"
           aria-label="Astral Ymir"
           className="absolute left-2 top-1 z-[60] transition-transform hover:scale-[1.02] sm:left-4"
+          style={{
+            opacity: hideLogo ? 0 : 1,
+            pointerEvents: hideLogo ? "none" : "auto",
+            transition: "opacity 320ms ease",
+          }}
         >
           <Image
             src="/images/logo-astral-ymir.png"
