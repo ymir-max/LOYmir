@@ -8,12 +8,12 @@ export const gameEvents: GameEvent[] = [
     title: "Invite & Earn Cash",
     status: "active",
     description:
-      "Invite friends to the Astral Ymir Discord using your personal invite link and earn real cash rewards for every verified, genuine sign-up.",
+      "Invite friends to the Astral Discord using your personal invite link and earn real cash rewards for every verified, genuine sign-up.",
     startsAt: undefined,
     endsAt: "2026-09-30",
     mechanics: [
       "Create your personal Discord invite link and share it with your friends.",
-      "Invite your friends to join the Astral Ymir Discord.",
+      "Invite your friends to join the Astral Discord.",
       "Your invited players must complete verification in the Verify channel.",
       "All three steps must be completed for an invite to count.",
       "Track your verified invite count anytime in the Invite Tracker channel.",
@@ -36,9 +36,9 @@ export const gameEvents: GameEvent[] = [
     startsAt: undefined,
     endsAt: "2026-09-01",
     mechanics: [
-      "Follow the official Astral Ymir Facebook page.",
-      "Share our post in Astral Ymir-related or other MMO-related Facebook community groups.",
-      "1 valid share in an Astral Ymir-related group = 1 raffle entry; 3 valid shares in other MMO-related groups = 1 raffle entry.",
+      "Follow the official Astral Facebook page.",
+      "Share our post in Astral-related or other MMO-related Facebook community groups.",
+      "1 valid share in an Astral-related group = 1 raffle entry; 3 valid shares in other MMO-related groups = 1 raffle entry.",
       "Submit links to your shared posts through the entry form.",
       "Shared posts must remain public until the event ends so they can be verified.",
     ],
@@ -61,7 +61,7 @@ export const gameEvents: GameEvent[] = [
     startsAt: undefined,
     endsAt: "2026-09-12",
     mechanics: [
-      "Follow the official Astral Ymir TikTok channel.",
+      "Follow the official Astral TikTok channel.",
       "Share or repost the official TikTok video.",
       "Each valid share counts as 1 raffle entry — share from multiple TikTok accounts for more entries.",
       "Submit links to your shared posts through the entry form.",

@@ -20,7 +20,7 @@ export default function Header() {
       <div className="relative mx-auto flex max-w-6xl items-center justify-end gap-3 px-4 py-3">
         <Link
           href="/"
-          aria-label="Astral Ymir"
+          aria-label="Astral"
           className="absolute left-2 top-1 z-[60] transition-transform hover:scale-[1.02] sm:left-4"
           style={{
             opacity: hideLogo ? 0 : 1,
@@ -29,12 +29,12 @@ export default function Header() {
           }}
         >
           <Image
-            src="/images/logo-astral-ymir.png"
-            alt="Astral Ymir"
-            width={1166}
-            height={780}
+            src="/images/logo-astral-full.png"
+            alt="Astral"
+            width={1713}
+            height={1209}
             priority
-            className="h-[84px] w-auto sm:h-[112px] lg:h-[132px]"
+            className="h-[88px] w-auto sm:h-[118px] lg:h-[140px]"
           />
         </Link>
 

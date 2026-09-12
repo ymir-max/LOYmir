@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Spectral, Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
@@ -19,18 +19,18 @@ const bodyFont = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Astral Ymir",
+  title: "Astral",
   description:
-    "Astral Ymir — an Unreal Engine 5 Norse-mythology MMORPG server. Register, download the client and play.",
+    "Astral — an Unreal Engine 5 MMORPG server. Register, download the client and play.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${displayFont.variable} ${bodyFont.variable} h-full overflow-x-hidden antialiased`}
+      className={`${displayFont.variable} ${bodyFont.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[color:var(--bg-base)] text-[color:var(--text-pale)]">
+      <body className="min-h-full flex flex-col overflow-x-hidden bg-[color:var(--bg-base)] text-[color:var(--text-pale)]">
         <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(1200px_800px_at_50%_-10%,var(--bg-panel)_0%,var(--bg-base)_60%),linear-gradient(to_bottom,var(--bg-base),var(--bg-panel),var(--bg-base))]" />
         <div
           className="pointer-events-none fixed inset-0 -z-10 opacity-[0.06] mix-blend-soft-light"

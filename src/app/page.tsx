@@ -109,7 +109,7 @@ function Hero() {
               GOLD_TEXT
             }
           >
-            Astral Ymir
+            Astral
           </span>
         </motion.h1>
 

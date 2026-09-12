@@ -32,7 +32,7 @@ export default function Footer() {
             Cumulative Rewards
           </a>
         </div>
-        <div className="text-center">© 2026 Astral Ymir. All rights reserved.</div>
+        <div className="text-center">© 2026 Astral. All rights reserved.</div>
       </div>
     </footer>
   );
