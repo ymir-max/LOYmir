@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { RegisterModalProvider } from "@/components/RegisterModal";
+import FaviconAnimator from "@/components/FaviconAnimator";
 
 const displayFont = Spectral({
   variable: "--font-display",
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={`${displayFont.variable} ${bodyFont.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col overflow-x-hidden bg-[color:var(--bg-base)] text-[color:var(--text-pale)]">
+        <FaviconAnimator />
         <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(1200px_800px_at_50%_-10%,var(--bg-panel)_0%,var(--bg-base)_60%),linear-gradient(to_bottom,var(--bg-base),var(--bg-panel),var(--bg-base))]" />
         <div
           className="pointer-events-none fixed inset-0 -z-10 opacity-[0.06] mix-blend-soft-light"
