@@ -4,9 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { LINKS } from "@/config/links";
+import { useRegisterModal } from "@/components/RegisterModal";
 
 export default function Header() {
   const [hideLogo, setHideLogo] = useState(false);
+  const { open: openRegister } = useRegisterModal();
 
   useEffect(() => {
     const onScroll = () => setHideLogo((window.scrollY || 0) > 120);
@@ -47,14 +49,13 @@ export default function Header() {
           >
             Cumulative Rewards
           </a>
-          <a
-            href={LINKS.register}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={openRegister}
             className="inline-flex items-center justify-center rounded-full px-3 py-2 text-xs font-semibold text-[color:var(--bg-base)] shadow-[inset_0_0_0_1px_rgba(168,135,90,0.45)] bg-[linear-gradient(180deg,var(--accent-cream),var(--accent-bronze))] transition-all hover:shadow-[0_0_22px_0_rgba(232,217,181,0.2)] active:scale-[0.98] sm:px-4 sm:text-sm"
           >
             Register
-          </a>
+          </button>
 
           <span className="ml-1 hidden h-5 w-[1px] bg-[color:var(--text-muted)]/30 sm:block" />
 

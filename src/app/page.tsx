@@ -25,6 +25,7 @@ import {
 import SectionDivider from "@/components/SectionDivider";
 import { gameEvents } from "@/lib/mock-data";
 import { LINKS } from "@/config/links";
+import { useRegisterModal } from "@/components/RegisterModal";
 
 const GOLD_TEXT =
   "bg-[linear-gradient(180deg,var(--accent-cream),var(--accent-bronze),var(--accent-cream))] [background-clip:text] [-webkit-background-clip:text] text-transparent [-webkit-text-fill-color:transparent]";
@@ -121,6 +122,7 @@ function DiscordNotice() {
 /* ------------------------------------------------------------------ */
 
 function Hero() {
+  const { open: openRegister } = useRegisterModal();
   return (
     <section className="relative flex min-h-[100svh] w-full items-center overflow-hidden">
       <video
@@ -182,14 +184,13 @@ function Hero() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.22 }}
           className="mt-9"
         >
-          <a
-            href={LINKS.register}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={openRegister}
             className={BTN_PRIMARY + " px-10 py-3.5 text-base tracking-[0.14em]"}
           >
             REGISTER
-          </a>
+          </button>
         </motion.div>
 
         <motion.div

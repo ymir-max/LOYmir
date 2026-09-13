@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { RegisterModalProvider } from "@/components/RegisterModal";
 
 const displayFont = Spectral({
   variable: "--font-display",
@@ -40,14 +41,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             backgroundSize: "256px 256px",
           }}
         />
-        <Header />
-        {/* Ambient orbs shared across all routes */}
-        <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-          <div className="ambient-orb-a -top-40 -left-40 h-[60vmax] w-[60vmax]" />
-          <div className="ambient-orb-b -bottom-60 right-[-20%] h-[50vmax] w-[50vmax]" />
-        </div>
-        <main className="flex-1 mx-auto w-full max-w-6xl px-4 py-10">{children}</main>
-        <Footer />
+        <RegisterModalProvider>
+          <Header />
+          {/* Ambient orbs shared across all routes */}
+          <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+            <div className="ambient-orb-a -top-40 -left-40 h-[60vmax] w-[60vmax]" />
+            <div className="ambient-orb-b -bottom-60 right-[-20%] h-[50vmax] w-[50vmax]" />
+          </div>
+          <main className="flex-1 mx-auto w-full max-w-6xl px-4 py-10">{children}</main>
+          <Footer />
+        </RegisterModalProvider>
       </body>
     </html>
   );
