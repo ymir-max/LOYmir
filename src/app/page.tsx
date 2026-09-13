@@ -19,6 +19,8 @@ import {
   Trophy,
   CalendarDays,
   Sparkles,
+  Megaphone,
+  ArrowRight,
 } from "lucide-react";
 import SectionDivider from "@/components/SectionDivider";
 import { gameEvents } from "@/lib/mock-data";
@@ -73,6 +75,48 @@ export default function Home() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Discord notice                                                      */
+/* ------------------------------------------------------------------ */
+
+function DiscordNotice() {
+  return (
+    <motion.a
+      href={LINKS.discord}
+      target="_blank"
+      rel="noopener noreferrer"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      className="group mb-10 block w-full max-w-2xl rounded-2xl p-[1px] bg-[linear-gradient(135deg,rgba(232,217,181,0.55),rgba(168,135,90,0.15),rgba(232,217,181,0.45))] shadow-[0_0_40px_-12px_rgba(232,217,181,0.35)] transition-shadow hover:shadow-[0_0_48px_-8px_rgba(232,217,181,0.5)]"
+    >
+      <div className="flex flex-col items-center gap-3 rounded-2xl bg-black/70 px-5 py-4 backdrop-blur-sm sm:flex-row sm:gap-4 sm:text-left">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(180deg,var(--accent-cream),var(--accent-bronze))]">
+          <Megaphone className="h-5 w-5 text-[color:var(--bg-base)]" />
+        </span>
+
+        <span className="flex-1">
+          <span className="block text-[10px] font-semibold uppercase tracking-[0.28em] text-[color:var(--accent-bronze)]">
+            Announcement
+          </span>
+          <span className={"mt-1 block text-base font-semibold sm:text-lg " + GOLD_TEXT}>
+            Our Discord has moved
+          </span>
+          <span className="mt-1 block text-sm text-[color:var(--text-pale)]/80">
+            Join the new official Astral Discord — news, support and giveaways
+            are all there.
+          </span>
+        </span>
+
+        <span className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-[color:var(--accent-bronze)]/50 bg-black/40 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--text-pale)] transition-colors group-hover:border-[color:var(--accent-cream)]/70 group-hover:text-[color:var(--accent-cream)]">
+          Join now
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+        </span>
+      </div>
+    </motion.a>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Hero                                                                */
 /* ------------------------------------------------------------------ */
 
@@ -96,7 +140,9 @@ function Hero() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_64%_56%_at_50%_46%,transparent_0%,rgba(0,0,0,0.30)_36%,rgba(0,0,0,0.84)_64%,#000_80%,var(--bg-base)_100%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.55),rgba(0,0,0,0.12)_34%,rgba(0,0,0,0.45)_70%,var(--bg-base))]" />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-4 py-24 text-center">
+      <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-4 pb-20 pt-32 text-center">
+        <DiscordNotice />
+
         <motion.h1
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
