@@ -6,7 +6,6 @@ import { useEffect } from "react";
 export default function FaviconAnimator() {
   useEffect(() => {
     const root = "/favicon-astral-v3";
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     const icon = document.createElement("link");
     icon.rel = "icon";
     icon.type = "image/png";
@@ -31,18 +30,17 @@ export default function FaviconAnimator() {
       icon.href = `${root}/static.png`;
     };
     const tick = () => {
-      if (disposed || document.hidden || media.matches) return;
+      if (disposed || document.hidden) return;
       icon.href = images[index].src;
       index = (index + 1) % images.length;
       timer = window.setTimeout(tick, 80);
     };
     const sync = () => {
       stop();
-      if (loaded && !disposed && !document.hidden && !media.matches) tick();
+      if (loaded && !disposed && !document.hidden) tick();
     };
 
     document.addEventListener("visibilitychange", sync);
-    media.addEventListener("change", sync);
     Promise.all(images.map(image => image.decode()))
       .then(() => { loaded = true; if (!disposed) sync(); })
       .catch(() => { /* Keep the static fallback if an asset fails. */ });
@@ -51,7 +49,6 @@ export default function FaviconAnimator() {
       disposed = true;
       stop();
       document.removeEventListener("visibilitychange", sync);
-      media.removeEventListener("change", sync);
       icon.remove();
     };
   }, []);
